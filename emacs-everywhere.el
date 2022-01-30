@@ -58,12 +58,10 @@ Formatted with the app name, and truncated window name."
 
 (defcustom emacs-everywhere-init-hooks
   `(emacs-everywhere-set-frame-name
-    emacs-everywhere-set-frame-position
     ,(cond
       ((executable-find "pandoc") #'org-mode)
       ((fboundp 'markdown-mode) #'emacs-everywhere-major-mode-org-or-markdown)
       (t #'text-mode))
-    emacs-everywhere-insert-selection
     emacs-everywhere-remove-trailing-whitespace
     emacs-everywhere-init-spell-check)
   "Hooks to be run before function `emacs-everywhere-mode'."
@@ -238,7 +236,7 @@ Never paste content when ABORT is non-nil."
           (write-file buffer-file-name)
           (pp (buffer-string))
           (call-process "xclip" nil nil nil "-selection" "clipboard" buffer-file-name))))
-    (sleep-for 0.01) ; prevents weird multi-second pause, lets clipboard info propagate
+    (sleep-for 0.1) ; prevents weird multi-second pause, lets clipboard info propagate
     (let ((window-id (emacs-everywhere-app-id emacs-everywhere-current-app)))
       (if (eq system-type 'darwin)
           (call-process "osascript" nil nil nil
